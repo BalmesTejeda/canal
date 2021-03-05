@@ -1,0 +1,32 @@
+{% extends 'canal/base.html' %}
+
+
+
+{% block content %}
+<main class="container">
+
+  <div class="starter-template text-center py-5 px-3">
+    <br>
+      <h1>DBC Sorter</h1>
+      <p>
+          DBC Sorter was written to keep changes on pacmod <br>
+          dbc files from accidentally wreaking havoc on <br>
+          Pi-Inovo Simulink models.
+      </p>
+      <p>
+          DBC sorter will take any dbc file and sort it based <br>
+          on CAN id.
+      </p>
+      <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="file" name="dbcfile" accept=".dbc">
+          <button type="submit"> Upload File</button>
+</form>
+
+  </div>
+
+
+
+</main>
+
+{% endblock content %}
