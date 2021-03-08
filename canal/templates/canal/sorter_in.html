@@ -11,13 +11,16 @@
       <p>
           DBC Sorter was written to keep changes on pacmod <br>
           dbc files from accidentally wreaking havoc on <br>
-          Pi-Inovo Simulink models.
+          Pi-Innovo Simulink models.
       </p>
       <p>
-          DBC sorter will take any dbc file and sort it based <br>
-          on CAN id, and sort the signals inside the messages <br>
-          based on byte position.
+          DBC sorter will take any dbc file and sort the signals <br>
+          inside the messages based on byte position.
       </p>
+      <p>
+          This keeps the signals in the correct order when used <br>
+          inside a Pi-Innovo CAN-Read block.
+            </p>
       <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <input type="file" name="dbcfile" accept=".dbc">
