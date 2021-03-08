@@ -20,7 +20,14 @@
       <p>
           This keeps the signals in the correct order when used <br>
           inside a Pi-Innovo CAN-Read block.
-            </p>
+      </p>
+      <p>
+          Failure to keep the signals in order will result in signals <br>
+          getting switched inside the simulink model.
+      </p>
+
+
+
       <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <input type="file" name="dbcfile" accept=".dbc">
