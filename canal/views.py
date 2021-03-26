@@ -2,7 +2,7 @@ import os
 from django.conf import settings
 
 from django.shortcuts import render
-from .functions import dbc_sorter
+from .functions import dbc_sorter, can_plot
 from django.http import HttpResponse, Http404
 
 
@@ -23,6 +23,15 @@ def sorter_in(request):
                 return response
         return render(request, 'canal/sorter_in.html')
 
+
+def cantrace_in(request):
+    if request.method == 'GET':
+        return render(request, 'canal/cantrace_in.html')
+    if request.method == 'POST':
+        uploaded_asc_file = request.FILES['ascfile']
+        script, div = can_plot(uploaded_asc_file)
+        return render(request, 'canal/cantrace_in.html', {'script': script,
+                                                          'div': div})
 
 
 
