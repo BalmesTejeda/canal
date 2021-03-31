@@ -51,7 +51,7 @@ def dbc_sorter(my_file):
     return filepath
 
 
-def can_plot(asc_file):
+def read_asc_file(asc_file):
     p = figure(title="Simple line example", x_axis_label='time', y_axis_label='data')
     # Regex expression is as follows
     #   (\d+.\d+)   Group 1 TIMESTAMP
@@ -68,29 +68,31 @@ def can_plot(asc_file):
     #
     # (\d+.\d+)\s+(\d)\s+(\w+)\s+Rx\s+d\s+(\d)\s(.+)\s\sL.+=\s(\d+)
     regex = '(\d+.\d+)\s+(\d)\s+(\w+)\s+Rx\s+d\s+(\d)\s(.+)\s\sL.+=\s(\d+)'
-
-    data_dictionary = {}
+    trace_info = {}
+    trace_data = {}
     for encoded_line in asc_file:
         decoded_line = encoded_line.decode('UTF-8')
         message = re.search(regex, decoded_line)
         if message:
             can_id = int(message.group(3), 16)
+            channel = int(message.group(2))
+            byte_length = int(message.group(4))
             timestamp = float(message.group(1))
-            data = [timestamp]
+            message_data = [timestamp]
             for byte in message.group(5).split(' '):
-                data.append(int(byte, 16))
-            if can_id not in data_dictionary:
-                data_dictionary[can_id] = [data]
+                message_data.append(int(byte, 16))
+            if can_id not in trace_info:
+                trace_info[can_id] = [channel, byte_length]
+                trace_data[can_id] = [message_data]
             else:
-                data_dictionary[can_id].append(data)
-
-
+                trace_data[can_id].append(message_data)
+    return trace_info, trace_data
 
 
     ''' This creates only one single plot
         The challenge is to create however many plots we want to see
         Mayb edo what Joe did and show INTERESTING data?
-        I dunno, let's find out...'''
+        I dunno, let's find out...
     p = figure(title="my example", x_axis_label='time', y_axis_label='dunno')
     np_data = np.array(data_dictionary[145])
     time = np_data[:,0]
@@ -108,9 +110,10 @@ def can_plot(asc_file):
     #   print(key, data_dictionary[key])
 
     print(len(my_keys))
-    ''' '''
+    
+    return script, div'''
 
-    return script, div
+
 
 
 

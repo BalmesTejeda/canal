@@ -1,0 +1,27 @@
+{% extends 'canal/base.html' %}
+
+
+
+
+{% block content %}
+<main class="container">
+    <div class="starter-template text-center py-5 px-3">
+        <br>
+        <h1>Can Trace Visualizer</h1>
+        <p>Let's see some can traces!!!</p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="ascfile" accept=".asc">
+            <button type="submit"> Upload File</button>
+        </form>
+    </div>
+
+<div>{{ div | safe }}</div>
+
+</main>
+
+{{ script | safe }}
+
+test
+
+{% endblock content %}

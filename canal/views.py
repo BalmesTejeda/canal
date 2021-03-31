@@ -1,8 +1,8 @@
 import os
 from django.conf import settings
 
-from django.shortcuts import render
-from .functions import dbc_sorter, can_plot
+from django.shortcuts import render, redirect
+from .functions import dbc_sorter, read_asc_file
 from django.http import HttpResponse, Http404
 
 
@@ -24,14 +24,24 @@ def sorter_in(request):
         return render(request, 'canal/sorter_in.html')
 
 
-def cantrace_in(request):
+def can_trace_in(request):
+    print(request)
     if request.method == 'GET':
-        return render(request, 'canal/cantrace_in.html')
+        return render(request, 'canal/can_trace_in.html')
     if request.method == 'POST':
         uploaded_asc_file = request.FILES['ascfile']
-        script, div = can_plot(uploaded_asc_file)
-        return render(request, 'canal/cantrace_in.html', {'script': script,
-                                                          'div': div})
+        info, data = read_asc_file(uploaded_asc_file)
+        print(info)
+        print(data)
 
+        # script, div = can_plot(uploaded_asc_file)
+        # return render(request, 'canal/can_trace_in.html', {'script': script, 'div': div})
+        return redirect(can_trace_chooser(info, data), info=info, data=data)
+        # return render(request, 'canal/can_trace_in.html')
+
+
+def can_trace_chooser(info, data):
+    print("Can Trace Chooser!!!")
+    pass
 
 
