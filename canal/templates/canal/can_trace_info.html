@@ -1,0 +1,57 @@
+{% extends 'canal/base.html' %}
+
+{% block content %}
+<main class="container">
+    <div class="starter-template text-center py-5 px-3">
+        <br>
+        <h1>Can Trace Info</h1>
+        <p>This will give you information about the CAN Trace file</p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="ascfile" accept=".asc">
+            <button type="submit"> Upload File</button>
+        </form>
+    </div>
+
+    <div>
+        <h3>Messages on Channel 1 </h3>
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Hex ID</th>
+                    <th scope="col">Data Length (bytes)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value in ch1 %}
+                <tr>
+                    <td>{{key}}</td>
+                    <td>{{value}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+                <h3>Messages on Channel 2 </h3>
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Hex ID</th>
+                    <th scope="col">Data Length (bytes)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value in ch2 %}
+                <tr>
+                    <td>{{key}}</td>
+                    <td>{{value}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+
+
+
+{% endblock content %}

@@ -1,27 +1,35 @@
 {% extends 'canal/base.html' %}
 
-
-
-
 {% block content %}
 <main class="container">
     <div class="starter-template text-center py-5 px-3">
         <br>
-        <h1>Can Trace Visualizer</h1>
-        <p>Let's see some can traces!!!</p>
+        <h1>Can Trace Plot</h1>
+        <p>This will plot the specified CAN channel that you enter</p>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
+            Message ID (hex)
+            <input type="text" name="message_id"><br>
             <input type="file" name="ascfile" accept=".asc">
             <button type="submit"> Upload File</button>
         </form>
     </div>
 
-<div>{{ div | safe }}</div>
+
+
+
+{% for div in divs %}
+<div class="text-center">{{ div | safe }}</div>
+{% endfor %}
 
 </main>
 
-{{ script | safe }}
 
+
+{% for script in scripts %}
+{{ script | safe }}
+{% endfor %}
 
 
 {% endblock content %}
+
