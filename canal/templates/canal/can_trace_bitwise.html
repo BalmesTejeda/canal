@@ -4,12 +4,23 @@
 <main class="container">
     <div class="starter-template text-center py-5 px-3">
         <br>
-        <h1>Can Trace Bitwise</h1>
-        <p>Trying to get bitwise plotting to work</p>
+        <h1>Can Trace Plot Bits</h1>
+        <p>This will plot whatever bits and bit ranges that you specify</p>
+        <p>from the desired CAN message in the file that you upload</p>
+        <br>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            Message ID (hex) <input type="text" name="message_id"><br>
-            Instructions <input type="text" name="instructions"><br>
+
+            <p>Please enter the Hex ID of the CAN message, without the 0x. </p>
+            <p>For example, for 0x40a, enter 40a or 40A</p>
+            Message ID <input type="text" name="message_id">
+            <br><br><br>
+            <p>Please enter the bits and bit ranges you would like to plot</p>
+            <p>Example: To plot bits 1, 2, and bit ranges 3-12, and 13-17, please enter:</p>
+            <p>1, 2, 3-12, 13-17</p>
+            Bits and bit ranges <input type="text" name="instructions">
+            <br><br><br>
+            <p>Please select and upload a file</p>
             <input type="file" name="ascfile" accept=".asc">
             <button type="submit"> Upload File</button>
         </form>

@@ -4,11 +4,16 @@
 <main class="container">
     <div class="starter-template text-center py-5 px-3">
         <br>
-        <h1>Can Trace Plot</h1>
-        <p>This will plot the specified CAN channel that you enter</p>
+        <h1>Can Trace Plot Bytes</h1>
+        <p>This will plot the bytes of the specified CAN message</p>
+        <p>from the file that you upload</p>
+        <br>
+
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            Message ID (hex)
+            <p>Please enter the Hex ID of the CAN message, without the 0x. </p>
+            <p>For example, for 0x40a, enter 40a or 40A</p>
+            Message ID
             <input type="text" name="message_id"><br>
             <input type="file" name="ascfile" accept=".asc">
             <button type="submit"> Upload File</button>
