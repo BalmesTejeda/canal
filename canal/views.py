@@ -41,7 +41,7 @@ def can_trace_plot(request):
         message_id = request.POST['message_id']
         scripts, divs = get_plots(uploaded_asc_file, message_id)
         context = {'scripts': scripts,
-                   'divs': divs}
+                   'divs': divs,}
         return render(request, 'canal/can_trace_plot.html', context)
 
 
@@ -53,7 +53,8 @@ def can_trace_bitwise(request):
         message_id = request.POST['message_id']
         instructions = request.POST['instructions']
         # scripts, divs = get_plots_bitwise(uploaded_asc_file, message_id)
-        scripts, divs = get_plots_bitwise(uploaded_asc_file, message_id, instructions)
+        scripts, divs, data_changes = get_plots_bitwise(uploaded_asc_file, message_id, instructions)
         context = {'scripts': scripts,
-                   'divs': divs}
+                   'divs': divs,
+                   'data_changes': data_changes}
         return render(request, 'canal/can_trace_bitwise.html', context)

@@ -212,6 +212,6 @@ def get_plots_bitwise(asc_file, hex_id, instructions):
         scripts.append(script)
         divs.append(div)
 
-    return scripts, divs
+    return scripts, divs, data_length_changes
 
 

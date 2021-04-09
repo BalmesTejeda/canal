@@ -15,16 +15,17 @@
         </form>
     </div>
 
-{% for div in divs %}
-    <div class="text-center">{{ div | safe }}</div>
-{% endfor %}
+    {% if data_changes %}
+    <p>Message data has varying byte length. This may produce strange results. </p>
+    {% endif %}
+    {% for div in divs %}
+        <div class="text-center">{{ div | safe }}</div>
+    {% endfor %}
 </main>
-
 
 {% for script in scripts %}
 {{ script | safe }}
 {% endfor %}
-
 
 {% endblock content %}
 
