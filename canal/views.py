@@ -1,9 +1,9 @@
 import os
 from django.conf import settings
 
-from django.shortcuts import render, redirect
-from .functions import dbc_sorter, read_asc_file, get_asc_info, get_plots
-from django.http import HttpResponse, Http404
+from django.shortcuts import render
+from .functions import dbc_sorter, get_asc_info, get_plots, get_plots_bitwise
+from django.http import HttpResponse
 
 
 def home(request):
@@ -44,3 +44,16 @@ def can_trace_plot(request):
                    'divs': divs}
         return render(request, 'canal/can_trace_plot.html', context)
 
+
+def can_trace_bitwise(request):
+    if request.method == 'GET':
+        return render(request, 'canal/can_trace_bitwise.html')
+    if request.method == 'POST':
+        uploaded_asc_file = request.FILES['ascfile']
+        message_id = request.POST['message_id']
+        instructions = request.POST['instructions']
+        # scripts, divs = get_plots_bitwise(uploaded_asc_file, message_id)
+        scripts, divs = get_plots_bitwise(uploaded_asc_file, message_id, instructions)
+        context = {'scripts': scripts,
+                   'divs': divs}
+        return render(request, 'canal/can_trace_bitwise.html', context)

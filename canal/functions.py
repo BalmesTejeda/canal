@@ -149,60 +149,69 @@ def get_plots(asc_file, hex_id):
     return scripts, divs
 
 
-def read_asc_file(asc_file):
-    p = figure(title="Simple line example", x_axis_label='time', y_axis_label='data')
+def get_plots_bitwise(asc_file, hex_id, instructions):
+    regex = '(\d+.\d+)\s+(\d)\s+' + hex_id.upper() + '\s+Rx\s+d\s+(\d)\s(.+)\s\sL.+=\s(\d+)'
+    starts_stops = []
+    data = []
+    first_message = True
+    data_length_changes = False
+    first_byte_length = None
+    instruction_list = [x.strip() for x in instructions.split(',')]
+    for item in instruction_list:
+        split_item = item.split('-')
+        start = int(split_item[0])
+        stop = start + 1
+        try:
+            stop = int(split_item[1])
+        except IndexError:
+            pass
+        starts_stops.append((start, stop))
 
-    regex = '(\d+.\d+)\s+(\d)\s+(\w+)\s+Rx\s+d\s+(\d)\s(.+)\s\sL.+=\s(\d+)'
-    trace_info = {}
-    trace_data = {}
     for encoded_line in asc_file:
         decoded_line = encoded_line.decode('UTF-8')
         message = re.search(regex, decoded_line)
         if message:
-            can_id = int(message.group(3), 16)
-            channel = int(message.group(2))
-            byte_length = int(message.group(4))
-            timestamp = float(message.group(1))
-            message_data = [timestamp]
-            for byte in message.group(5).split(' '):
-                message_data.append(int(byte, 16))
-            if can_id not in trace_info:
-                trace_info[can_id] = [channel, byte_length]
-                trace_data[can_id] = [message_data]
+            message_bytes = int(message.group(3))
+            if first_message:
+                first_byte_length = message_bytes
+                first_message = False
             else:
-                trace_data[can_id].append(message_data)
-    return trace_info, trace_data
+                if first_byte_length == message_bytes:
+                    pass
+                else:
+                    data_length_changes = True
 
+            timestamp = float(message.group(1))
+            line_data = [timestamp]
+            bin_string = ""
+            for byte in message.group(4).split(' '):
+                bin_string += format(int(byte, 16), '08b')
+            bin_string = bin_string.ljust(64, '0')
+            for start, stop in starts_stops:
+                line_data.append(int(bin_string[start:stop], 2))
+            data.append(line_data)
 
+    np_data = np.array(data)
+    scripts = []
+    divs = []
 
+    rows, cols = np_data.shape
+    for item in range(cols-1):
 
+        start, stop = starts_stops[item]
+        if stop-start > 1:
+            title = "Bits " + str(start) + '-' + str(stop)
+        else:
+            title = "Bit " + str(start)
 
-    ''' This creates only one single plot
-        The challenge is to create however many plots we want to see
-        Mayb edo what Joe did and show INTERESTING data?
-        I dunno, let's find out...
-    p = figure(title="my example", x_axis_label='time', y_axis_label='dunno')
-    np_data = np.array(data_dictionary[145])
-    time = np_data[:,0]
-    trace1 = np_data[:,5]
+        my_plot = figure(title=title, x_axis_label='time', y_axis_label='Value')
+        time = np_data[:, 0]
+        trace = np_data[:, item+1]
+        my_plot.line(time, trace, legend_label=title, line_width=2)
+        script, div = components(my_plot)
+        scripts.append(script)
+        divs.append(div)
 
-
-    p.line(time, trace1, legend_label="trace1", line_width=2)
-    script, div = components(p)
-
-    my_keys = sorted(data_dictionary.keys())
-    print(type(my_keys))
-    print(my_keys)
-
-    # for key in my_keys:
-    #   print(key, data_dictionary[key])
-
-    print(len(my_keys))
-    
-    return script, div'''
-
-
-
-
+    return scripts, divs
 
 
